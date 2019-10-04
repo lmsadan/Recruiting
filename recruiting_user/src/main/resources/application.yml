@@ -1,0 +1,17 @@
+server: 
+  port: 9008
+spring: 
+  application:  
+    name: recruiting-user #指定服务名
+  datasource:  
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.1.102:3306/tensquare_user?useSSL=false
+    username: root
+    password: 1234
+  jpa: 
+    database: MySQL
+    show-sql: true
+  redis:
+    host: 192.168.1.102
+  rabbitmq:
+    host: 192.168.1.102

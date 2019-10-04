@@ -17,8 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import util.IdWorker;
 
 import com.tensquare.article.dao.ArticleDao;
@@ -31,6 +33,7 @@ import com.tensquare.article.pojo.Article;
  *
  */
 @Service
+@Transactional
 public class ArticleService {
 
 	@Autowired
@@ -38,6 +41,18 @@ public class ArticleService {
 	
 	@Autowired
 	private IdWorker idWorker;
+
+	@Autowired
+	private RedisTemplate redisTemplate;
+
+
+	public void updateState(String id){
+		articleDao.updateState(id);
+	}
+
+	public void addThumbup(String id){
+		articleDao.addThumbup(id);
+	}
 
 	/**
 	 * 查询全部列表
@@ -78,7 +93,13 @@ public class ArticleService {
 	 * @return
 	 */
 	public Article findById(String id) {
-		return articleDao.findById(id).get();
+		//先从缓存中查询当前对象
+		Article article = (Article) redisTemplate.opsForValue().get("article_"+id);
+		if (article == null){
+			article = articleDao.findById(id).get();
+			redisTemplate.opsForValue().set("article_"+id,article);
+		}
+		return article;
 	}
 
 	/**
@@ -95,6 +116,7 @@ public class ArticleService {
 	 * @param article
 	 */
 	public void update(Article article) {
+		redisTemplate.delete("article_"+article.getId());
 		articleDao.save(article);
 	}
 
@@ -103,6 +125,7 @@ public class ArticleService {
 	 * @param id
 	 */
 	public void deleteById(String id) {
+		redisTemplate.delete("article_"+id);
 		articleDao.deleteById(id);
 	}
 

@@ -14,6 +14,11 @@
         <module>recruiting_recruit</module>
         <module>recruiting_qa</module>
         <module>recruiting_article</module>
+        <module>recruiting_gathering</module>
+        <module>recruiting_spit</module>
+        <module>recruiting_search</module>
+        <module>recruiting_user</module>
+        <module>recruiting_sms</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -25,11 +30,6 @@
     </parent>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -79,12 +79,4 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>

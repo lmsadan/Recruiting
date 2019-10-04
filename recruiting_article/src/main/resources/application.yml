@@ -2,12 +2,14 @@ server:
   port: 9004
 spring:
   application:
-    name: tensquare-recruit #指定服务名
+    name: recruiting-recruit #指定服务名
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.1.102:3306/tensquare_recruit?useSSL=false
+    url: jdbc:mysql://192.168.1.102:3306/tensquare_article?useSSL=false
     username: root
     password: 1234
   jpa:
     database: MySQL
     show-sql: true
+  redis:
+    host: 192.168.1.102
