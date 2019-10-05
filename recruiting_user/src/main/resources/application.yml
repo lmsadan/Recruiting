@@ -17,6 +17,10 @@ spring:
   rabbitmq:
     host: 192.168.1.102
 
+jwt:
+  config:
+    key: imsadan
+
 eureka:
   client:
     service-url:

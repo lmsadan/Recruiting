@@ -22,6 +22,9 @@
         <module>recruiting_sms</module>
         <module>recruiting_eureka</module>
         <module>recruiting_friend</module>
+        <module>recruiting_manager</module>
+        <module>recruiting_web</module>
+        <module>recruiting_config</module>
     </modules>
 
 

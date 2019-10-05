@@ -13,6 +13,9 @@ spring:
     database: MySQL
     show-sql: true
 
+jwt:
+  config:
+    key: imsadan
 
 eureka:
   client:

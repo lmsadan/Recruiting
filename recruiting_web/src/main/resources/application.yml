@@ -1,0 +1,42 @@
+server:
+  port: 9012
+
+spring:
+  application:
+    name: recruiting-web
+
+#服务注册
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:6868/eureka/
+  instance:
+    prefer-ip-address: true #跨域访问
+
+#网关
+zuul:
+  routes:
+    recruiting-base:
+      path: /base/**
+      serviceId: recruiting-base
+    recruiting-user:
+      path: /user/**
+      serviceId: recruiting-user
+    recruiting-qa:
+      path: /qa/**
+      serviceId: recruiting-qa
+    recruiting‐gathering: #活动
+      path: /gathering/** #配置请求URL的请求规则
+      serviceId: recruiting‐gathering #指定Eureka注册中心中的服务id
+    recruiting‐article: #文章
+      path: /article/** #配置请求URL的请求规则
+      serviceId: recruiting‐article #指定Eureka注册中心中的服务id
+    recruiting‐friend: #交友
+      path: /friend/** #配置请求URL的请求规则
+      serviceId: recruiting‐friend #指定Eureka注册中心中的服务id
+    recruiting‐recruit: #招聘
+      path: /recruit/** #配置请求URL的请求规则
+      serviceId: recruiting‐recruit #指定Eureka注册中心中的服务id
+    recruiting‐spit: #吐槽
+      path: /spit/** #配置请求URL的请求规则
+      serviceId: recruiting‐spit #指定Eureka注册中心中的服务id

@@ -5,3 +5,10 @@ spring:
     name: recruiting-sms #指定服务名
   rabbitmq:
     host: 192.168.1.102
+
+aliyun:
+  sms:
+    sign_name: imsadan
+    template_code: SMS_175050349
+    accessKeySecret: CG4YiwtJjEhLNhWzkBOHWg7AFCj9fs
+    accessKeyId: LTAI4FueS4ecjZzscpdjjakc
