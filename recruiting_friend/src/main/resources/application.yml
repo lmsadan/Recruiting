@@ -1,18 +1,18 @@
 server:
-  port: 9001
-
+  port: 9010
 
 spring:
   application:
-    name: recruiting-base
+    name: recruiting-friend #指定服务名
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.1.102:3306/tensquare_base?useSSL=false
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.1.102:3306/tensquare_friend?useSSL=false
     username: root
     password: 1234
   jpa:
-    database: mysql
+    database: MySQL
     show-sql: true
+
 
 eureka:
   client:

@@ -6,6 +6,7 @@
 
     <groupId>com.recruiting</groupId>
     <artifactId>Recruiting</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <modules>
@@ -19,8 +20,10 @@
         <module>recruiting_search</module>
         <module>recruiting_user</module>
         <module>recruiting_sms</module>
+        <module>recruiting_eureka</module>
+        <module>recruiting_friend</module>
     </modules>
-    <packaging>pom</packaging>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -28,6 +31,25 @@
         <version>2.0.1.RELEASE</version>
         <relativePath/>
     </parent>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.M9</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
 
     <dependencies>
         <dependency>
@@ -42,14 +64,14 @@
     </dependencies>
 
     <repositories>
-    <repository>
-    <id>spring‐snapshots</id>
-    <name>Spring Snapshots</name>
-    <url>https://repo.spring.io/snapshot</url>
-    <snapshots>
-        <enabled>true</enabled>
-    </snapshots>
-    </repository>
+        <repository>
+            <id>spring‐snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>spring‐milestones</id>
             <name>Spring Milestones</name>
