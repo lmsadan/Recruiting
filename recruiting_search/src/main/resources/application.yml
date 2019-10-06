@@ -1,8 +1,0 @@
-server:
-  port: 9007
-spring:
-  application:
-    name: recruiting-search
-  data:
-    elasticsearch:
-      cluster-nodes: localhost:9300

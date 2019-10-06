@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import entity.StatusCode;
  */
 @RestController
 @CrossOrigin
+@RefreshScope
 @RequestMapping("/reply")
 public class ReplyController {
 

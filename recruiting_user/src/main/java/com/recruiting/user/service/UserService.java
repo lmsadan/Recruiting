@@ -206,7 +206,7 @@ public class UserService {
 		map.put("mobile",mobile);
 		map.put("checkcode",checkcode);
 		//抛给rabbitmq
-		//rabbitTemplate.convertAndSend("sms",map);
+		rabbitTemplate.convertAndSend("sms",map);
 		//在控制台显示一份[方便测试]
 		System.out.println("验证码为:"+checkcode);
 	}
