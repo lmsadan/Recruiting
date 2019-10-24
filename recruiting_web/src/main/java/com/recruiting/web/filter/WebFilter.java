@@ -37,6 +37,7 @@ public class WebFilter extends ZuulFilter {
             //把请求头信息继续向下传
             currentContext.addZuulRequestHeader("Authorization",header);
         }
+        System.out.println("经过网关过滤器");
         return null;
     }
 }

@@ -57,7 +57,7 @@ public class UserController {
 	public Result login(@RequestBody User user){
 		user = userService.login(user.getMobile(),user.getPassword());
 		if (user == null){
-			return new Result(false,StatusCode.LOGINERROR,"登录失败");
+			return new Result(false,StatusCode.LOGINERROR,"用户不存在或密码错误");
 		}
 		String token = jwtUtil.createJWT(user.getId(), user.getMobile(), "user");
 		Map<String,Object> map = new HashMap<>();
@@ -71,7 +71,7 @@ public class UserController {
 	@RequestMapping(value = "/register/{code}",method = RequestMethod.POST)
 	public Result register(@PathVariable String code,@RequestBody User user){
 		String checkcodeRedis = (String) redisTemplate.opsForValue().get("checkcode_"+user.getMobile());
-		if (checkcodeRedis.isEmpty()){
+		if (checkcodeRedis == null){
 			return new Result(false,StatusCode.ERROR,"请先获取手机验证码");
 		}
 		if (!checkcodeRedis.equals(code)){
