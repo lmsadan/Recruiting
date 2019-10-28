@@ -31,8 +31,8 @@ public class EnterpriseController {
 	@Autowired
 	private EnterpriseService enterpriseService;
 
-	@RequestMapping(value = "/search/hotlist", method = RequestMethod.GET)
-	public Result hotlist(){
+	@RequestMapping(value = "/search/hotList", method = RequestMethod.GET)
+	public Result hotList(){
 		List<Enterprise> enterprises = enterpriseService.hotList("1");
 		return new Result(true,StatusCode.OK,"查询成功",enterprises);
 	}

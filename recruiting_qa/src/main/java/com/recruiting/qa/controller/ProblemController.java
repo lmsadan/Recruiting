@@ -4,6 +4,7 @@ import java.util.Map;
 import com.recruiting.qa.service.ProblemService;
 import com.recruiting.qa.client.BaseClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;

@@ -155,6 +155,26 @@ public class User implements Serializable{
 		this.followcount = followcount;
 	}
 
-
-	
+	@Override
+	public String toString() {
+		return "User{" +
+				"id='" + id + '\'' +
+				", loginname='" + loginname + '\'' +
+				", password='" + password + '\'' +
+				", nickname='" + nickname + '\'' +
+				", sex='" + sex + '\'' +
+				", birthday=" + birthday +
+				", image='" + image + '\'' +
+				", mobile='" + mobile + '\'' +
+				", email='" + email + '\'' +
+				", regdate=" + regdate +
+				", updatedate=" + updatedate +
+				", lastdate=" + lastdate +
+				", online=" + online +
+				", interest='" + interest + '\'' +
+				", personality='" + personality + '\'' +
+				", fanscount=" + fanscount +
+				", followcount=" + followcount +
+				'}';
+	}
 }

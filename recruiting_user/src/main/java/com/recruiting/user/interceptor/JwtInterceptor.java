@@ -30,7 +30,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                 //对令牌进行验证
                 try {
                     Claims claims = jwtUtil.parseJWT(token);
-                    String roles = (String) claims.get("roles");
+                    String roles = (String) claims.get("role");
                     if (roles != null && roles.equals("admin")){
                         request.setAttribute("claims_admin",claims);
                     }

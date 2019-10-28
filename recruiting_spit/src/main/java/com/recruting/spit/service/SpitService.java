@@ -2,6 +2,7 @@ package com.recruting.spit.service;
 
 import com.recruting.spit.dao.SpitDao;
 import com.recruting.spit.pojo.Spit;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,9 +14,12 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import util.IdWorker;
+import util.JwtUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -23,12 +27,14 @@ public class SpitService {
 
     @Autowired
     private SpitDao spitDao;
-
+    @Autowired
+    private HttpServletRequest request;
     @Autowired
     private IdWorker idWorker;
-
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public List<Spit> findAll(){
         return spitDao.findAll();
@@ -39,6 +45,13 @@ public class SpitService {
     }
 
     public void save(Spit spit){
+        String header = request.getHeader("Authorization");
+        String token = header.substring(7);
+        Claims claims = jwtUtil.parseJWT(token);
+        String userid = (String) claims.get("userid");
+        String nickname = (String) claims.get("nickname");
+        spit.setUserid(userid);
+        spit.setNickname(nickname);
         spit.set_id(idWorker.nextId()+"");
         spit.setPublishtime(new Date());//发布日期
         spit.setVisits(0);//浏览量
@@ -71,15 +84,25 @@ public class SpitService {
         return spitDao.findByParentid(parentid,pageable);
     }
 
-    public void thumbup(String spitId) {
+    public Page<Spit> findSearch(Map searchMap,int page,int size){
+        Pageable pageable = PageRequest.of(page-1,size);
+        return spitDao.findByStateAndParentidNull((String) searchMap.get("state"),pageable);
+    }
+
+    public void thumbup(String spitId,boolean flag) {
+
 //        Spit spit = spitDao.findById(spitId).get();
 //        spit.setThumbup((spit.getThumbup()==null ? 0 : spit.getThumbup()) + 1);
 //        spitDao.save(spit);
-
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(spitId));
         Update update = new Update();
-        update.inc("thumbup",1);
+        if (flag) {
+            update.inc("thumbup", 1);
+        }else{
+            update.inc("thumbup",-1);
+        }
         mongoTemplate.updateFirst(query,update,"spit");
     }
+
 }

@@ -38,7 +38,7 @@ public class RecruitService {
 		return recruitDao.findTop6ByStateOrderByCreatetimeDesc("2");
 	}
 
-	public List<Recruit> newlist(){
+	public List<Recruit> newList(){
 		return recruitDao.findTop5ByStateNotOrderByCreatetimeDesc("0");
 	}
 

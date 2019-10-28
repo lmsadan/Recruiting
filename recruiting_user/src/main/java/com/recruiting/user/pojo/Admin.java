@@ -20,37 +20,57 @@ public class Admin implements Serializable{
 	
 	private String loginname;//登陆名称
 	private String password;//密码
+	private String avatar;//头像
 	private String state;//状态
 
-	
-	public String getId() {		
+	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getLoginname() {		
+	public String getLoginname() {
 		return loginname;
 	}
+
 	public void setLoginname(String loginname) {
 		this.loginname = loginname;
 	}
 
-	public String getPassword() {		
+	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	public String getState() {		
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getState() {
 		return state;
 	}
+
 	public void setState(String state) {
 		this.state = state;
 	}
 
-
-	
+	@Override
+	public String toString() {
+		return "Admin{" +
+				"id='" + id + '\'' +
+				", loginname='" + loginname + '\'' +
+				", password='" + password + '\'' +
+				", avatar='" + avatar + '\'' +
+				", state='" + state + '\'' +
+				'}';
+	}
 }

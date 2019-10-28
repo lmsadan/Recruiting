@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @CrossOrigin
 @RestController
 @RefreshScope
@@ -26,6 +28,13 @@ public class SpitController {
     @RequestMapping(method = RequestMethod.GET)
     public Result findAll(){
         return new Result(true, StatusCode.OK,"查询成功",spitService.findAll());
+    }
+
+    @RequestMapping(value="/search/{page}/{size}",method = RequestMethod.POST)
+    public Result findSearch(@RequestBody Map searchMap,@PathVariable int page,@PathVariable int size){
+        Page<Spit> searchPage = spitService.findSearch(searchMap, page, size);
+
+        return new Result(true, StatusCode.OK,"查询成功",new PageResult<Spit>(searchPage.getTotalElements(),searchPage.getContent()));
     }
 
     @RequestMapping(value = "/{spitId}",method = RequestMethod.GET)
@@ -52,20 +61,21 @@ public class SpitController {
         return new Result(true, StatusCode.OK,"删除成功");
     }
 
-    @RequestMapping(value = "/spitId/comment/{parentid}/{page}/{size}",method = RequestMethod.GET)
-    public Result findByParentid(@PathVariable String parentid, @PathVariable int page, @PathVariable int size){
-        Page<Spit> byParentid = spitService.findByParentid(parentid, page, size);
-        return new Result(true, StatusCode.OK,"查询成功",new PageResult<Spit>(byParentid.getTotalElements(),byParentid.getContent()));
+    @RequestMapping(value = "/comment/{parentid}/{page}/{size}",method = RequestMethod.GET)
+    public Result findByParentId(@PathVariable String parentid, @PathVariable int page, @PathVariable int size){
+        Page<Spit> byParentId = spitService.findByParentid(parentid, page, size);
+        return new Result(true, StatusCode.OK,"查询成功",new PageResult<Spit>(byParentId.getTotalElements(),byParentId.getContent()));
     }
 
     @RequestMapping(value = "/thumbup/{spitId}",method = RequestMethod.PUT)
-    public Result thumbup(@PathVariable String spitId){
-        String userid = "111";
-        if (redisTemplate.opsForValue().get("thumbup_"+userid) != null){
-            return new Result(false, StatusCode.REPERROR,"不能重复点赞");
+    public Result thumbup(@PathVariable String spitId,@RequestBody String userId){
+        if (redisTemplate.opsForValue().get("thumbup_"+spitId+userId) != null){
+            redisTemplate.delete("thumbup_"+spitId+userId);
+            spitService.thumbup(spitId,false);
+            return new Result(false, StatusCode.OK,"取消点赞");
         }
-        spitService.thumbup(spitId);
-        redisTemplate.opsForValue().set("thumbup_"+userid,1);
+        spitService.thumbup(spitId,true);
+        redisTemplate.opsForValue().set("thumbup_"+spitId+userId,1);
         return new Result(true, StatusCode.OK,"点赞成功");
     }
 

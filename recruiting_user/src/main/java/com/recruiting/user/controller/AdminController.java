@@ -1,16 +1,14 @@
 package com.recruiting.user.controller;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.jsonwebtoken.Claims;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.recruiting.user.pojo.Admin;
 import com.recruiting.user.service.AdminService;
@@ -19,6 +17,8 @@ import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
 import util.JwtUtil;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 控制器层
@@ -37,19 +37,31 @@ public class AdminController {
 	@Autowired
 	private JwtUtil jwtUtil;
 
+	@RequestMapping(value = "/info",method = RequestMethod.GET)
+	public Result info(@RequestParam String token){
+		Claims claims = jwtUtil.parseJWT(token);
+		Map<String,Object> map = new HashMap<>();
+		map.put("role",(String) claims.get("role"));
+		map.put("loginname",(String) claims.get("nickname"));
+		map.put("avatar",(String) claims.get("avatar"));
+		return new Result(true,StatusCode.OK,"获取成功",map);
+	}
+
+
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public Result login(@RequestBody Admin admin){
+	public Result login(@RequestBody Admin admin) throws Exception {
+		System.out.println(admin.toString());
 		Admin admin1 = adminService.login(admin);
 		if (admin1 == null){
 			return new Result(false,StatusCode.LOGINERROR,"登录失败");
 		}
 		//前后端通讯认证,采用JWT来实现
 		//生成令牌
-		String token = jwtUtil.createJWT(admin1.getId(), admin1.getLoginname(), "admin");
-		Map<String,Object> map = new HashMap<>();
-		map.put("token",token);
+		HashMap map = (HashMap)BeanUtils.describe(admin1);
 		map.put("role","admin");
-		map.put("name",admin1.getLoginname());
+		map.put("nickname",admin1.getLoginname());
+		String token = jwtUtil.createJWT(map);
+		map.put("token",token);
 		return new Result(true,StatusCode.OK,"登录成功",map);
 	}
 

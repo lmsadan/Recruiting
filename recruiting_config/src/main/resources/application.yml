@@ -9,6 +9,8 @@ spring:
       server:
         git:
           uri: https://gitee.com/imsadan/propertise.git
+          username: imsadan
+          password: qq520821
   rabbitmq:
     host: 101.200.58.52
     password: qq520821

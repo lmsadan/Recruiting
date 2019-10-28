@@ -36,9 +36,9 @@ public class RecruitController {
 		return new Result(true,StatusCode.OK,"查询成功",recruitService.recommend());
 	}
 
-	@RequestMapping(value = "/search/newlist", method = RequestMethod.GET)
-	public Result newlist(){
-		return new Result(true,StatusCode.OK,"查询成功",recruitService.newlist());
+	@RequestMapping(value = "/search/newList", method = RequestMethod.GET)
+	public Result newList(){
+		return new Result(true,StatusCode.OK,"查询成功",recruitService.newList());
 	}
 	
 	/**

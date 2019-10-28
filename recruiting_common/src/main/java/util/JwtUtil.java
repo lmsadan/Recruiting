@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/4/11.
@@ -35,25 +37,25 @@ public class JwtUtil {
         this.ttl = ttl;
     }
 
-    /**
-     * 生成JWT
-     *
-     * @param id
-     * @param subject
-     * @return
-     */
-    public String createJWT(String id, String subject, String roles) {
+
+    public String createJWT(HashMap map) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        JwtBuilder builder = Jwts.builder().setId(id)
-                .setSubject(subject)
+        JwtBuilder builder = Jwts.builder().setId((String) map.get("id"))
+                .setSubject((String) map.get("nickname"))
                 .setIssuedAt(now)
-                .signWith(SignatureAlgorithm.HS256, key).claim("roles", roles);
+                .signWith(SignatureAlgorithm.HS256, key)
+                .claim("role",  map.get("role"))
+                .claim("userid", map.get("id"))
+                .claim("nickname",  map.get("nickname"))
+                .claim("avatar",  map.get("avatar"))
+                .claim("mobile",  map.get("mobile"));
         if (ttl > 0) {
             builder.setExpiration( new Date( nowMillis + ttl));
         }
         return builder.compact();
     }
+
 
     /**
      * 解析JWT

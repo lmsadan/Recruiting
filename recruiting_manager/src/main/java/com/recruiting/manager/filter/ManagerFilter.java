@@ -59,7 +59,7 @@ public class ManagerFilter extends ZuulFilter {
             String token = header.substring(7);
             try {
                 Claims claims = jwtUtil.parseJWT(token);
-                String  roles = (String) claims.get("roles");
+                String  roles = (String) claims.get("role");
                 if (roles.equals("admin")){
                     currentContext.addZuulRequestHeader("Authorization",header);
                     return null;

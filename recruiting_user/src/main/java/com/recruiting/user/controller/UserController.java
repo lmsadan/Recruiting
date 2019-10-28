@@ -1,7 +1,10 @@
 package com.recruiting.user.controller;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
@@ -54,16 +57,15 @@ public class UserController {
 
 
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public Result login(@RequestBody User user){
+	public Result login(@RequestBody User user) throws Exception {
 		user = userService.login(user.getMobile(),user.getPassword());
 		if (user == null){
 			return new Result(false,StatusCode.LOGINERROR,"用户不存在或密码错误");
 		}
-		String token = jwtUtil.createJWT(user.getId(), user.getMobile(), "user");
-		Map<String,Object> map = new HashMap<>();
-		map.put("token",token);
+		HashMap map = (HashMap) BeanUtils.describe(user);
 		map.put("role","user");
-		map.put("name",user.getLoginname());
+		String token = jwtUtil.createJWT(map);
+		map.put("token",token);
 		return new Result(true,StatusCode.OK,"登录成功",map);
 	}
 

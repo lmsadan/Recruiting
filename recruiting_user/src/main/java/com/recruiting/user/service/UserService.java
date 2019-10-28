@@ -105,6 +105,10 @@ public class UserService {
 	 * @param user
 	 */
 	public void add(User user) {
+		Optional<User> optionalUser = Optional.ofNullable(userDao.findByMobile(user.getMobile()));
+		if (optionalUser.isPresent()) {
+			throw new RuntimeException("用户已存在!");
+		}
 		user.setId( idWorker.nextId()+"" );
 		user.setPassword(encoder.encode(user.getPassword()));
 		user.setFollowcount(0);//关注数
