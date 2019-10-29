@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import util.IdWorker;
 
 import com.recruiting.user.dao.UserDao;
@@ -39,21 +42,18 @@ import util.JwtUtil;
 @Service
 public class UserService {
 
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private UserDao userDao;
-	
 	@Autowired
 	private IdWorker idWorker;
-
 	@Autowired
-	private RedisTemplate redisTemplate;
-
+	private RedisTemplate<String,String> redisTemplate;
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-
 	@Autowired
 	private BCryptPasswordEncoder encoder;
-
 	@Autowired
 	private HttpServletRequest request;
 
@@ -117,6 +117,7 @@ public class UserService {
 		user.setRegdate(new Date());//注册日期
 		user.setUpdatedate(new Date());//更新日期
 		user.setLastdate(new Date());//最后登陆日期
+		user.setImage("http://www.oss.imsadan.club/user-images/default.png");//默认头像
 		userDao.save(user);
 	}
 
@@ -201,10 +202,13 @@ public class UserService {
 	}
 
 	public void sendSms(String mobile) {
+		String s = redisTemplate.opsForValue().get(mobile);
+		Assert.isNull(s,"请1分钟后在获取");
 		//生成六位随机数
 		String checkcode = RandomStringUtils.randomNumeric(6);
 		//向缓存中放一份
-		redisTemplate.opsForValue().set("checkcode_"+mobile,checkcode,6, TimeUnit.HOURS);
+		redisTemplate.opsForValue().set("checkcode_"+mobile,checkcode,5, TimeUnit.MINUTES);
+		redisTemplate.opsForValue().set(mobile, checkcode,1,TimeUnit.MINUTES);
 		//给用户发一份
 		Map<String,String> map = new HashMap<>();
 		map.put("mobile",mobile);
@@ -212,7 +216,7 @@ public class UserService {
 		//抛给rabbitmq
 		rabbitTemplate.convertAndSend("sms",map);
 		//在控制台显示一份[方便测试]
-		System.out.println("验证码为:"+checkcode);
+		logger.info(mobile+"--->获取验证码---"+checkcode);
 	}
 
 

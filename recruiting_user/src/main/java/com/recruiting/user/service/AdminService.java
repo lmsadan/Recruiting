@@ -106,6 +106,7 @@ public class AdminService {
 		admin.setId( idWorker.nextId()+"" );
 		//密码加密
 		admin.setPassword(encoder.encode(admin.getPassword()));
+		admin.setAvatar("http://www.oss.imsadan.club/user-images/default.png");
 		adminDao.save(admin);
 	}
 

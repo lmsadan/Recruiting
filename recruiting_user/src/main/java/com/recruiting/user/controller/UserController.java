@@ -39,7 +39,7 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
-	private RedisTemplate redisTemplate;
+	private RedisTemplate<String,String> redisTemplate;
 
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -63,7 +63,7 @@ public class UserController {
 			return new Result(false,StatusCode.LOGINERROR,"用户不存在或密码错误");
 		}
 		HashMap map = (HashMap) BeanUtils.describe(user);
-		map.put("role","user");
+		map.put("role", "user");
 		String token = jwtUtil.createJWT(map);
 		map.put("token",token);
 		return new Result(true,StatusCode.OK,"登录成功",map);

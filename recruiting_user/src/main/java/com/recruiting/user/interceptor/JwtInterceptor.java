@@ -18,7 +18,6 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("经过拦截器");
         //无论如何都放行,具体能不能操作还是在具体的操作中取判断
         //拦截器只负责把请求头中包含token的令牌进行一个解析验证
         String header = request.getHeader("Authorization");

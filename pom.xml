@@ -26,6 +26,7 @@
         <module>recruiting_web</module>
         <module>recruiting_config</module>
         <module>recruiting_oss</module>
+        <module>recruiting_scheduled</module>
     </modules>
 
 
