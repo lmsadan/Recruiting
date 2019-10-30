@@ -4,4 +4,4 @@ spring:
       name: gathering
       profile: dev
       label: master
-      uri: http://localhost:12000
+      uri: http://101.200.58.52:12000
